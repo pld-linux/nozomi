@@ -11,14 +11,13 @@
 Summary:	HSDPA driver for Broadband Wireless Data Card - Globe Trotter
 Summary(pl):	Sterownik HSDPA dla kart bezprzewodowych Globe Trotter
 Name:		nozomi
-# version number taken from CHANGELOG
-Version:	2.0
+Version:	2.1
 Release:	%{_rel}
 Epoch:		0
 License:	GPL
 Group:		Base/Kernel
-Source0:	http://www.pharscape.org/3G/%{name}_060209.tar.gz
-# Source0-md5:	90e4d8f389a18b5579f7234a23e32e99
+Source0:	http://www.pharscape.org/3G/%{name}_%{version}_060703.tar.gz
+# Source0-md5:	56c822da9fbd95eca422873bafff8cd3
 URL:		http://www.pharscape.org/
 %{?with_dist_kernel:BuildRequires:	kernel-module-build >= 3:2.6.14}
 BuildRequires:	rpmbuild(macros) >= 1.286
@@ -139,12 +138,12 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -n kernel-char-nozomi
 %defattr(644,root,root,755)
-%doc CHANGELOG README TODO
+%doc CHANGELOG readme todo
 /lib/modules/%{_kernel_ver}/kernel/drivers/char/*.ko*
 
 %if %{with smp} && %{with dist_kernel}
 %files -n kernel-smp-char-nozomi
 %defattr(644,root,root,755)
-%doc CHANGELOG README TODO
+%doc CHANGELOG readme todo
 /lib/modules/%{_kernel_ver}smp/kernel/drivers/char/*.ko*
 %endif
