@@ -1,0 +1,36 @@
+diff -Nur 1/nozomi.c 2/nozomi.c
+--- 1/nozomi.c	2006-07-03 13:41:20.000000000 +0000
++++ 2/nozomi.c	2007-01-03 15:37:20.000000000 +0000
+@@ -969,23 +969,6 @@
+         return 1;
+     }
+ 
+-    if (test_bit(TTY_DONT_FLIP, &tty->flags)) {
+-        D6("TTY_DONT_FLIP set!! %d", index);
+-        /* Here we disable interrupt for that port and schedule */
+-/* 		task. Task wakes up a little bit later and enables interrupt.. */
+-        port->tty_dont_flip = 1;
+-        disable_transmit_dl(index, dc);
+-#ifdef KERNEL_2_4
+-        schedule_task(&dc->tty_flip_queue);
+-#endif
+-#ifdef KERNEL_2_6
+-        if (!queue_work(dc->tty_flip_wq, &dc->tty_flip_wq_struct)) {
+-            ERR("Call to queue_work() failed.");
+-        }
+-#endif
+-        return 0;
+-    }
+-
+     GET_MEM( &size, addr, 4 );
+     /*  D1( "%d bytes port: %d", size, index); */
+ 
+@@ -2180,7 +2163,7 @@
+     td->major                 = NTTY_TTY_MAJOR,
+     td->type                  = TTY_DRIVER_TYPE_SERIAL,
+     td->subtype               = SERIAL_TYPE_NORMAL,
+-    td->flags                 = TTY_DRIVER_REAL_RAW | TTY_DRIVER_NO_DEVFS,
++    td->flags                 = TTY_DRIVER_REAL_RAW | TTY_DRIVER_DYNAMIC_DEV,
+     td->init_termios          = tty_std_termios;
+     td->init_termios.c_cflag  = B115200 | CS8 | CREAD | HUPCL | CLOCAL;
+ 
