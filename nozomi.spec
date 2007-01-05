@@ -19,6 +19,7 @@ Group:		Base/Kernel
 Source0:	http://www.pharscape.org/3G/%{name}_%{version}_060703.tar.gz
 # Source0-md5:	56c822da9fbd95eca422873bafff8cd3
 URL:		http://www.pharscape.org/
+Patch0:		%{name}-tty_dont_flip.patch
 %{?with_dist_kernel:BuildRequires:	kernel-module-build >= 3:2.6.14}
 BuildRequires:	rpmbuild(macros) >= 1.286
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -75,51 +76,18 @@ Ten pakiet zawiera modu³ j±dra Linuksa SMP.
 
 %prep
 %setup -q -c
+%patch0 -p1
 
 echo 'obj-m += nozomi.o' > Makefile
 
 %build
-for cfg in %{?with_dist_kernel:%{?with_smp:smp} up}%{!?with_dist_kernel:nondist}; do
-	if [ ! -r "%{_kernelsrcdir}/config-$cfg" ]; then
-		exit 1
-	fi
-	install -d o/include/linux
-	ln -sf %{_kernelsrcdir}/config-$cfg o/.config
-	ln -sf %{_kernelsrcdir}/Module.symvers-$cfg o/Module.symvers
-	ln -sf %{_kernelsrcdir}/include/linux/autoconf-$cfg.h o/include/linux/autoconf.h
-%if %{with dist_kernel}
-	%{__make} -j1 -C %{_kernelsrcdir} O=$PWD/o prepare scripts
-%else
-	install -d o/include/config
-	touch o/include/config/MARKER
-	ln -sf %{_kernelsrcdir}/scripts o/scripts
-%endif
-	%{__make} -C %{_kernelsrcdir} clean \
-		RCS_FIND_IGNORE="-name '*.ko' -o" \
-		SYSSRC=%{_kernelsrcdir} \
-		SYSOUT=$PWD/o \
-		M=$PWD O=$PWD/o \
-		%{?with_verbose:V=1}
-	%{__make} -C %{_kernelsrcdir} modules \
-		CC="%{__cc}" CPP="%{__cpp}" \
-		SYSSRC=%{_kernelsrcdir} \
-		SYSOUT=$PWD/o \
-		M=$PWD O=$PWD/o \
-		%{?with_verbose:V=1}
 
-	mv nozomi{,-$cfg}.ko
-done
+%build_kernel_modules -m nozomi
 
 %install
 rm -rf $RPM_BUILD_ROOT
 
-install -d $RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}{,smp}/kernel/drivers/char
-install nozomi-%{?with_dist_kernel:up}%{!?with_dist_kernel:nondist}.ko \
-	$RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}/kernel/drivers/char/nozomi.ko
-%if %{with smp} && %{with dist_kernel}
-install nozomi-smp.ko \
-	$RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}smp/kernel/drivers/char/nozomi.ko
-%endif
+%install_kernel_modules -m nozomi -d kernel/drivers/char
 
 %clean
 rm -rf $RPM_BUILD_ROOT
