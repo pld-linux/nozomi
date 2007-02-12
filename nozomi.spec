@@ -9,7 +9,7 @@
 #
 %define		_rel	1
 Summary:	HSDPA driver for Broadband Wireless Data Card - Globe Trotter
-Summary(pl.UTF-8):   Sterownik HSDPA dla kart bezprzewodowych Globe Trotter
+Summary(pl.UTF-8):	Sterownik HSDPA dla kart bezprzewodowych Globe Trotter
 Name:		nozomi
 Version:	2.1
 Release:	%{_rel}
@@ -32,7 +32,7 @@ Sterownik HSDPA dla kart bezprzewodowych Globe Trotter.
 
 %package -n kernel-char-nozomi
 Summary:	Linux HSDPA driver for Broadband Wireless Data Card - Globe Trotter
-Summary(pl.UTF-8):   Sterownik HSDPA dla Linuksa do kart bezprzewodowych Globe Trotter
+Summary(pl.UTF-8):	Sterownik HSDPA dla Linuksa do kart bezprzewodowych Globe Trotter
 Release:	%{_rel}@%{_kernel_ver_str}
 Group:		Base/Kernel
 Requires(post,postun):	/sbin/depmod
@@ -54,7 +54,7 @@ Ten pakiet zawiera moduł jądra Linuksa.
 
 %package -n kernel-smp-char-nozomi
 Summary:	Linux SMP HSDPA driver for Broadband Wireless Data Card - Globe Trotter
-Summary(pl.UTF-8):   Sterownik HSDPA dla Linuksa SMP do kart bezprzewodowych Globe Trotter
+Summary(pl.UTF-8):	Sterownik HSDPA dla Linuksa SMP do kart bezprzewodowych Globe Trotter
 Release:	%{_rel}@%{_kernel_ver_str}
 Group:		Base/Kernel
 Requires(post,postun):	/sbin/depmod
