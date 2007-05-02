@@ -16,8 +16,8 @@ Source0:	http://www.pharscape.org/3G/%{name}_%{version}_060703.tar.gz
 # Source0-md5:	56c822da9fbd95eca422873bafff8cd3
 URL:		http://www.pharscape.org/
 Patch0:		%{name}-tty_dont_flip.patch
-%{?with_dist_kernel:BuildRequires:	kernel-module-build >= 3:2.6.14}
-BuildRequires:	rpmbuild(macros) >= 1.286
+%{?with_dist_kernel:BuildRequires:	kernel-module-build >= 3:2.6.20.2}
+BuildRequires:	rpmbuild(macros) >= 1.379
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
