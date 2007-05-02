@@ -48,8 +48,10 @@ Ten pakiet zawiera moduł jądra Linuksa.
 %prep
 %setup -q -c
 %patch0 -p1
-
-echo 'obj-m += nozomi.o' > Makefile
+cat > Makefile <<'EOF'
+obj-m += nozomi.o
+nozomi-objs += kfifo.o
+EOF
 
 %build
 
@@ -73,5 +75,5 @@ rm -rf $RPM_BUILD_ROOT
 %files -n kernel%{_alt_kernel}-char-%{name}
 %defattr(644,root,root,755)
 %doc CHANGELOG readme todo
-/lib/modules/%{_kernel_ver}kernel/drivers/char/*.ko*
+/lib/modules/%{_kernel_ver}/kernel/drivers/char/*.ko*
 %endif
