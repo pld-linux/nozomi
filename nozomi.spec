@@ -1,12 +1,8 @@
 #
 # Conditional build:
 %bcond_without	dist_kernel	# allow non-distribution kernel
-%bcond_without	smp		# don't build SMP module
 %bcond_with	verbose		# verbose build (V=1)
 
-#
-# main package.
-#
 %define		_rel	1
 Summary:	HSDPA driver for Broadband Wireless Data Card - Globe Trotter
 Summary(pl.UTF-8):	Sterownik HSDPA dla kart bezprzewodowych Globe Trotter
@@ -30,49 +26,24 @@ HSDPA driver for Broadband Wireless Data Card - Globe Trotter.
 %description -l pl.UTF-8
 Sterownik HSDPA dla kart bezprzewodowych Globe Trotter.
 
-%package -n kernel-char-nozomi
+%package -n kernel%{_alt_kernel}-char-%{name}
 Summary:	Linux HSDPA driver for Broadband Wireless Data Card - Globe Trotter
 Summary(pl.UTF-8):	Sterownik HSDPA dla Linuksa do kart bezprzewodowych Globe Trotter
 Release:	%{_rel}@%{_kernel_ver_str}
 Group:		Base/Kernel
 Requires(post,postun):	/sbin/depmod
-%if %{with dist_kernel}
-%requires_releq_kernel_up
-Requires(postun):	%releq_kernel_up
-%endif
+%{?with_dist_kernel:%requires_releq_kernel}
 
-%description -n kernel-char-nozomi
+%description -n kernel%{_alt_kernel}-char-%{name}
 This is HSDPA driver for Broadband Wireless Data Card - Globe Trotter
 for Linux.
 
 This package contains Linux module.
 
-%description -n kernel-char-nozomi -l pl.UTF-8
+%description -n kernel%{_alt_kernel}-char-%{name} -l pl.UTF-8
 Sterownik HSDPA dla Linuksa do kart bezprzewodowych Globe Trotter.
 
 Ten pakiet zawiera moduł jądra Linuksa.
-
-%package -n kernel-smp-char-nozomi
-Summary:	Linux SMP HSDPA driver for Broadband Wireless Data Card - Globe Trotter
-Summary(pl.UTF-8):	Sterownik HSDPA dla Linuksa SMP do kart bezprzewodowych Globe Trotter
-Release:	%{_rel}@%{_kernel_ver_str}
-Group:		Base/Kernel
-Requires(post,postun):	/sbin/depmod
-%if %{with dist_kernel}
-%requires_releq_kernel_smp
-Requires(postun):	%releq_kernel_smp
-%endif
-
-%description -n kernel-smp-char-nozomi
-This is HSDPA driver for Broadband Wireless Data Card - Globe Trotter
-for Linux.
-
-This package contains Linux SMP module.
-
-%description -n kernel-smp-char-nozomi -l pl.UTF-8
-Sterownik HSDPA dla Linuksa do kart bezprzewodowych Globe Trotter.
-
-Ten pakiet zawiera moduł jądra Linuksa SMP.
 
 %prep
 %setup -q -c
@@ -82,12 +53,12 @@ echo 'obj-m += nozomi.o' > Makefile
 
 %build
 
-%build_kernel_modules -m nozomi
+%build_kernel_modules -m %{name}
 
 %install
 rm -rf $RPM_BUILD_ROOT
 
-%install_kernel_modules -m nozomi -d kernel/drivers/char
+%install_kernel_modules -m %{name} -d kernel/drivers/char
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -98,20 +69,9 @@ rm -rf $RPM_BUILD_ROOT
 %postun	-n kernel-char-nozomi
 %depmod %{_kernel_ver}
 
-%post	-n kernel-smp-char-nozomi
-%depmod %{_kernel_ver}smp
-
-%postun	-n kernel-smp-char-nozomi
-%depmod %{_kernel_ver}smp
-
-%files -n kernel-char-nozomi
+%if %{with dist_kernel}
+%files -n kernel%{_alt_kernel}-char-%{name}
 %defattr(644,root,root,755)
 %doc CHANGELOG readme todo
-/lib/modules/%{_kernel_ver}/kernel/drivers/char/*.ko*
-
-%if %{with smp} && %{with dist_kernel}
-%files -n kernel-smp-char-nozomi
-%defattr(644,root,root,755)
-%doc CHANGELOG readme todo
-/lib/modules/%{_kernel_ver}smp/kernel/drivers/char/*.ko*
+/lib/modules/%{_kernel_ver}kernel/drivers/char/*.ko*
 %endif
