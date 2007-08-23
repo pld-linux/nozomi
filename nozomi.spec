@@ -67,10 +67,10 @@ rm -rf $RPM_BUILD_ROOT
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%post	-n kernel-char-nozomi
+%post	-n kernel%{_alt_kernel}-char-%{name}
 %depmod %{_kernel_ver}
 
-%postun	-n kernel-char-nozomi
+%postun	-n kernel%{_alt_kernel}-char-%{name}
 %depmod %{_kernel_ver}
 
 %if %{with dist_kernel}
