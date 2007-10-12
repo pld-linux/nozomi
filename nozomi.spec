@@ -3,7 +3,7 @@
 %bcond_without	dist_kernel	# allow non-distribution kernel
 %bcond_with	verbose		# verbose build (V=1)
 
-%define		_rel	3
+%define		_rel	4
 Summary:	HSDPA driver for Broadband Wireless Data Card - Globe Trotter
 Summary(pl.UTF-8):	Sterownik HSDPA dla kart bezprzewodowych Globe Trotter
 Name:		nozomi
